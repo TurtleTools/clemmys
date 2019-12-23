@@ -1,11 +1,14 @@
-import typing
 from dataclasses import dataclass
 
+import typing
 from matplotlib import patches as m_patches
 from matplotlib.font_manager import FontProperties
 from matplotlib.textpath import TextPath
 from matplotlib.transforms import Bbox, Affine2D
 
+"""
+Code adapted from https://github.com/jbkinney/logomaker"
+"""
 
 @dataclass
 class Glyph:

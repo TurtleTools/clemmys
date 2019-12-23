@@ -1,6 +1,6 @@
 import numpy as np
-from matplotlib import Path as m_Path
 from matplotlib import patches as m_patches
+from matplotlib.path import Path as m_Path
 
 
 def make_semicircle(x1: float, x2: float, y: float, valley: bool, color: str, opacity: float = 1., linewidth: float = 1.):
@@ -27,8 +27,8 @@ def make_semicircle(x1: float, x2: float, y: float, valley: bool, color: str, op
     if height == 0:
         return 0, None
     if valley:
-        return height, m_patches.Arc((middle, y), -height, -height, angle=-180, theta1=180, theta2=360,
-                                     lw=linewidth, color=color, alpha=opacity)
+        return -height, m_patches.Arc((middle, y), -height, -height, angle=-180, theta1=180, theta2=360,
+                                      lw=linewidth, color=color, alpha=opacity)
     else:
         return height, m_patches.Arc((middle, y), height, height, angle=0, theta1=0, theta2=180,
                                      lw=linewidth, color=color, alpha=opacity)
@@ -78,8 +78,8 @@ def make_range_semicircle_bracket(x11: float, x12: float, x21: float, x22: float
     return height, [p1, p2, p3]
 
 
-def make_connection(x1: float, y1: float, x2: float, y2: float, arrow_style: m_patches.ArrowStyle, color: str, opacity: float = 1.,
-                    linewidth: float = 1.):
+def make_connection(x1: float, y1: float, x2: float, y2: float, color: str, opacity: float = 1.,
+                    linewidth: float = 1., arrow_style: m_patches.ArrowStyle = m_patches.ArrowStyle.Curve()):
     """
     Makes a line (with a particular arrow style) between (x1, y1) and (x2, y2)
 
@@ -136,7 +136,7 @@ def make_range_connection_bracket(x11: float, x12: float, x21: float, x22: float
                                    arrowstyle=m_patches.ArrowStyle.BracketA(widthA=middle_1,
                                                                             lengthA=3,
                                                                             angleA=None))
-    p2 = make_connection(middle_1, y11, middle_2, y21, arrow_style, color, opacity, linewidth)
+    p2 = make_connection(middle_1, y11, middle_2, y21, color, opacity, linewidth, arrow_style)
     p3 = m_patches.FancyArrowPatch(path=m_Path([(middle_2, y2), (middle_2, y21)],
                                                [m_Path.MOVETO, m_Path.LINETO]),
                                    fc="none", lw=linewidth, color=color, alpha=opacity,
@@ -146,8 +146,8 @@ def make_range_connection_bracket(x11: float, x12: float, x21: float, x22: float
     return [p1, p2, p3]
 
 
-def make_curve(x1: float, x2: float, y: float, arrow_style: m_patches.ArrowStyle, valley: bool, color: str, opacity: float = 1.,
-               linewidth: float = 1.):
+def make_curve(x1: float, x2: float, y: float, valley: bool, color: str, opacity: float = 1.,
+               linewidth: float = 1., arrow_style: m_patches.ArrowStyle = m_patches.ArrowStyle.Curve()):
     """
     Makes a curved link between (x1, y) and (x2, y) with a given arrow style
 
@@ -170,10 +170,10 @@ def make_curve(x1: float, x2: float, y: float, arrow_style: m_patches.ArrowStyle
     middle = (x1 + x2) // 2
     height = 2 * np.abs(x1 - middle)
     if valley:
-        return height, m_patches.FancyArrowPatch(path=m_Path([(x1, y), (middle, y - height), (x2, y)],
-                                                             [m_Path.MOVETO, m_Path.CURVE3, m_Path.CURVE3]),
-                                                 fc="none", lw=linewidth, color=color, alpha=opacity,
-                                                 arrowstyle=arrow_style)
+        return -height, m_patches.FancyArrowPatch(path=m_Path([(x1, y), (middle, y - height), (x2, y)],
+                                                              [m_Path.MOVETO, m_Path.CURVE3, m_Path.CURVE3]),
+                                                  fc="none", lw=linewidth, color=color, alpha=opacity,
+                                                  arrowstyle=arrow_style)
     else:
         return height, m_patches.FancyArrowPatch(path=m_Path([(x1, y), (middle, y + height), (x2, y)],
                                                              [m_Path.MOVETO, m_Path.CURVE3, m_Path.CURVE3]),
@@ -216,7 +216,7 @@ def make_range_curve_bracket(x11: float, x12: float, x21: float, x22: float, y: 
                                    arrowstyle=m_patches.ArrowStyle.BracketA(widthA=middle_1,
                                                                             lengthA=3,
                                                                             angleA=None))
-    height, p2 = make_curve(middle_1, middle_2, y1, arrow_style, valley, color, opacity, linewidth)
+    height, p2 = make_curve(middle_1, middle_2, y1, valley, color, opacity, linewidth, arrow_style)
     p3 = m_patches.FancyArrowPatch(path=m_Path([(middle_2, y), (middle_2, y1)],
                                                [m_Path.MOVETO, m_Path.LINETO]),
                                    fc="none", lw=linewidth, color=color, alpha=opacity,

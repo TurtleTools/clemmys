@@ -4,5 +4,4 @@ setup(name='clemmys',
       version='1.0',
       authors=["Janani Durairaj"],
       packages=["clemmys"],
-      install_requires=["numpy", "matplotlib"],
-      )
+      install_requires=["numpy", "matplotlib"])

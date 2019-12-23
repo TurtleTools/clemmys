@@ -3,6 +3,10 @@ from matplotlib import patches as m_patches
 
 from clemmys.colors import COLOR_SCHEME_SS
 
+"""
+Code adapted from https://gist.github.com/JoaoRodrigues/f9906b343d3acb38e39f2b982b02ecb0"
+"""
+
 
 class SecondaryStructure:
     def __init__(self, ss_labels: list, x=0, y=0, helix_as_wave=True, width=2.,
